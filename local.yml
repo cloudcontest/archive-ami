@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  user: root
+  pre_tasks:
+    - name: be sure apt cache is updated
+      apt: update_cache=yes
+
+  tasks:
+    - name: install dependencies
+      apt: pkg={{item}} state=present
+      with_items:
+        - awscli
+        - mysql-client
+
+    - name: copy archive scripts
+      copy: src=files/{{item}} dest=/root/ mode=0755
+      with_items:
+        - do_archive
